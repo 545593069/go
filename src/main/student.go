@@ -1,12 +1,11 @@
 package main
 
-
 type student struct {
 	id   int64
 	name string
 }
 
-func newStudent(id int64, name string) *student {
+func NewStudent(id int64, name string) *student {
 	return &student{id: id, name: name}
 }
 

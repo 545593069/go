@@ -21,6 +21,6 @@ func main() {
 	p1 := newPerson("元帅", 18)
 	p2 := newPerson("周林", 9000)
 	fmt.Println(p1, p2)
-	d1 := newDog("周林")
+	d1 := newPerson("周林", 12)
 	fmt.Println(d1)
 }
