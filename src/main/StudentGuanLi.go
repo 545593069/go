@@ -5,9 +5,7 @@ import (
 	"os"
 )
 
-var (
-	allStudnet map[int64]*student //变量声明
-)
+var AllStudent map[int64]*student //变量声明
 
 func deleteStudent() {
 	// 1.请用户输入要删除的学生的序号
@@ -15,7 +13,7 @@ func deleteStudent() {
 	fmt.Print("请输入学生学号:")
 	fmt.Scanln(&deleteID)
 	// 2.去allStudent这 个map中根据学号删除对应的键值对
-	delete(allStudnet, deleteID)
+	delete(AllStudent, deleteID)
 
 }
 
@@ -26,7 +24,7 @@ func addStudent() {
 	//向a1lStudent中添加一个新的学生
 	// 1.创建一个新学生
 	// 1.1获取用户输入
-	var(
+	var (
 		id   int64
 		name string
 	)
@@ -39,22 +37,22 @@ func addStudent() {
 	newStu.SetId(id)
 	newStu.SetName(name)
 	// 2.追加到allStudent这个map中
-	allStudnet[id] = newStu
+	AllStudent[id] = newStu
 }
 
 func showAllStudent() {
 	//把所有的学生都打印出来
-	for i:=0 ;i < len(allStudnet);i++{
-		s := allStudnet[int64(i)]
+	for i := 0; i < len(AllStudent); i++ {
+		s := AllStudent[int64(i)]
 		fmt.Printf("学号:%d姓名:%s\n", s.id, s.name)
 	}
-	for k, v := range allStudnet {
+	for k, v := range AllStudent {
 		fmt.Printf("学号:%d姓名:%s\n", k, v.name)
 	}
 }
 
 func main() {
-	allStudnet = make(map[int64]*student, 48) //初始化(开辟内存空间)
+	AllStudent = make(map[int64]*student, 48) //初始化(开辟内存空间)
 	for {
 		// 1.打印菜单
 		fmt.Println("欢迎光临学生管理系统!")
