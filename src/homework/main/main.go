@@ -27,13 +27,10 @@ func main() {
 	}
 	for {
 		//等待用户输入选项
-		fmt.Println("请输入要执行的序号")
-		var choice int
-		fmt.Println(choice)
 		for {
 			showMenu()
 			//等待用户输入选项
-			fmt.Print("请输入序号:")
+			fmt.Print("请输入要执行的序号:")
 			var choice int
 			fmt.Scanln(&choice)
 			fmt.Println("你输入的是:", choice)

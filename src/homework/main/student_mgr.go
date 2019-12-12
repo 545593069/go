@@ -33,6 +33,11 @@ func (s studentMgr) addStudent() {
 	//获取用户输入
 	fmt.Print("请输入学号:")
 	fmt.Scanln(&stuID)
+	stuObj, ok := s.allStudent[stuID]
+	if ok {
+		fmt.Printf("已存在此学号，学生信息如下:学号：%d ， 姓名：%s \n ", stuObj.id, stuObj.name)
+		return
+	}
 	//根据用户输入创建结构体对象
 	fmt.Print("请输入姓名:")
 	fmt.Scanln(&stuName)
@@ -53,7 +58,11 @@ func (s studentMgr) editStudent() {
 	fmt.Print("请输入学号:")
 	fmt.Scanln(&stuID)
 	// 2.展示该学号对应的学生信息, 如果没有提示查无此人
-	value := s.allStudent[stuID]
+	value, ok := s.allStudent[stuID]
+	if !ok {
+		fmt.Println("查无此人!")
+		return
+	}
 	fmt.Println("学生的姓名为", value.name)
 	// 3.请输入修改后的学生名
 	fmt.Print("请输入修改后的学生姓名:")
@@ -71,13 +80,19 @@ func (s studentMgr) editStudent() {
 //删除学生
 func (s studentMgr) deleteStudent() {
 	var stuID int64
-	fmt.Println("请输入学号")
+	fmt.Print("请输入学号")
 	fmt.Scanln(&stuID)
 	fmt.Println("你输入的学号为", stuID)
-	fmt.Println("确认删除？ 确认请按1")
-	var Enter int64
+	stuObj, ok := s.allStudent[stuID]
+	if !ok {
+		fmt.Println("查无此人!")
+		return
+	}
+	fmt.Printf("你要删除的学生信息如下:学号：%d ， 姓名：%s \n ", stuObj.id, stuObj.name)
+	fmt.Print("确认删除？ 确认请按回车键!")
+	var Enter string
 	fmt.Scanln(&Enter)
-	if Enter == 1 {
+	if Enter == "" {
 		delete(s.allStudent, stuID)
 		fmt.Println("删除成功")
 	} else {
