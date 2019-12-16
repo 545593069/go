@@ -1,4 +1,4 @@
-package main
+package test
 
 type student struct {
 	id   int64

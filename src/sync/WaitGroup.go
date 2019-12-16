@@ -22,5 +22,5 @@ func main() {
 		fmt.Println("匿名函数")
 	}()
 	wg.Wait() //等待计数为0，表示goroutine的线程都执行完成
-	fmt.Println("main hello")
+	fmt.Println("test hello")
 }

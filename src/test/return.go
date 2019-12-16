@@ -1,4 +1,4 @@
-package main
+package test
 
 // Go语言中函数的return不是原子操作，在底层是分为两步来执行
 //第一步:返回值赋值
@@ -6,7 +6,7 @@ package main
 //函数中如果存在defer,那么defer执行的时机是在第一步和第二步之间
 func f1() int {
 	x := 5
-	defer func () {
+	defer func() {
 		x++
 	}()
 	return x
@@ -26,7 +26,7 @@ func f3() (y int) {
 }
 func f4() (x int) {
 	defer func(x int) {
-		x ++
+		x++
 	}(x)
 	return 5
 }
