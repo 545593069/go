@@ -79,40 +79,11 @@ func (l Logger) enable(loglevel LogLevel) bool {
 }
 
 func (l Logger) log(level LogLevel, format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	now := time.Now()
-	funcName, fileName, LineNo := getInfo(3)
-	fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05 "), getLogName(level), fileName, funcName, LineNo, msg)
-}
-
-func (l Logger) Debug(format string, a ...interface{}) {
-	if l.enable(DEBUG) {
-		l.log(DEBUG, format, a...)
-	}
-}
-func (l Logger) Info(format string, a ...interface{}) {
-	if l.enable(INFO) {
-		l.log(INFO, format, a...)
-	}
-}
-func (l Logger) TRACE(format string, a ...interface{}) {
-	if l.enable(TRACE) {
-		l.log(TRACE, format, a...)
-	}
-}
-func (l Logger) Warning(format string, a ...interface{}) {
-	if l.enable(WARNING) {
-		l.log(WARNING, format, a...)
-	}
-}
-func (l Logger) Error(format string, a ...interface{}) {
-	if l.enable(ERROR) {
-		l.log(ERROR, format, a...)
-	}
-}
-func (l Logger) Fatal(format string, a ...interface{}) {
-	if l.enable(FATAL) {
-		l.log(FATAL, format, a...)
+	if l.enable(level) {
+		msg := fmt.Sprintf(format, a...)
+		now := time.Now()
+		funcName, fileName, LineNo := getInfo(3)
+		fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05 "), getLogName(level), fileName, funcName, LineNo, msg)
 	}
 }
 
@@ -125,4 +96,23 @@ func getInfo(n int) (funcName, fileName string, line int) {
 	funcName = strings.Split(runtime.FuncForPC(pc).Name(), ".")[1]
 	fileName = path.Base(file)
 	return
+}
+
+func (l Logger) Debug(format string, a ...interface{}) {
+	l.log(DEBUG, format, a...)
+}
+func (l Logger) Info(format string, a ...interface{}) {
+	l.log(INFO, format, a...)
+}
+func (l Logger) TRACE(format string, a ...interface{}) {
+	l.log(TRACE, format, a...)
+}
+func (l Logger) Warning(format string, a ...interface{}) {
+	l.log(WARNING, format, a...)
+}
+func (l Logger) Error(format string, a ...interface{}) {
+	l.log(ERROR, format, a...)
+}
+func (l Logger) Fatal(format string, a ...interface{}) {
+	l.log(FATAL, format, a...)
 }

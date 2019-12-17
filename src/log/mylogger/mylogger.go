@@ -26,7 +26,7 @@ func f1() {
 
 func f() {
 	for {
-		logger := Logger{INFO}
+		logger := Logger{UNKNOWN}
 		Logger.Debug(logger, "这是一条Debug日志")
 		Logger.TRACE(logger, "这是一条Trace日志")
 		Logger.Info(logger, "这是一条Info日志")
