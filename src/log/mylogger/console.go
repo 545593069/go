@@ -1,8 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"path"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -11,32 +12,60 @@ type LogLevel uint16
 
 const (
 	UNKNOWN LogLevel = iota
-	DEBUG   LogLevel = 1
-	TRACE   LogLevel = 2
-	INFO    LogLevel = 3
-	WARNING LogLevel = 4
-	ERROR   LogLevel = 5
-	FATAL   LogLevel = 6
+	FATAL   LogLevel = 1
+	DEBUG   LogLevel = 2
+	WARNING LogLevel = 3
+	TRACE   LogLevel = 4
+	INFO    LogLevel = 5
+	ERROR   LogLevel = 6
 )
 
-func parsLogLevel(s string) (LogLevel, error) {
-	s = strings.ToLower(s)
-	switch s {
-	case "debug":
-		return DEBUG, nil
-	case "trace":
-		return TRACE, nil
-	case "info":
-		return INFO, nil
-	case "warning":
-		return WARNING, nil
-	case "error":
-		return ERROR, nil
-	case "fatal":
-		return FATAL, nil
+//// NewLog 构造函数
+//func NewLog(LeverStr string) Logger {
+//	level, err := parsLogLevel(LeverStr)
+//	if err != nil {
+//		panic(err)
+//	}
+//	return Logger{level: level}
+//}
+
+//func parsLogLevel(s string) (LogLevel, error) {
+//	s = strings.ToLower(s)
+//	switch s {
+//	case "debug":
+//		return DEBUG, nil
+//	case "trace":
+//		return TRACE, nil
+//	case "info":
+//		return INFO, nil
+//	case "warning":
+//		return WARNING, nil
+//	case "error":
+//		return ERROR, nil
+//	case "fatal":
+//		return FATAL, nil
+//	default:
+//		err := errors.New("日志级别设置错误，设置级别为; DEBUG; TRACE; INFO; WARNING; ERROR; FATAL")
+//		return UNKNOWN, err
+//	}
+//}
+
+func getLogName(level LogLevel) string {
+	switch level {
+	case DEBUG:
+		return "DEBUG"
+	case TRACE:
+		return "TRACE"
+	case INFO:
+		return "INFO"
+	case WARNING:
+		return "WARNING"
+	case ERROR:
+		return "ERROR"
+	case FATAL:
+		return "FATAL"
 	default:
-		err := errors.New("日志级别设置错误，设置级别为; DEBUG; TRACE; INFO; WARNING; ERROR; FATAL")
-		return UNKNOWN, err
+		return "UNKNOWN"
 	}
 }
 
@@ -45,52 +74,54 @@ type Logger struct {
 	level LogLevel
 }
 
-// NewLog 构造函数
-func NewLog(LeverStr string) Logger {
-	level, err := parsLogLevel(LeverStr)
-	if err != nil {
-		panic(err)
-	}
-	return Logger{level: level}
-}
-
 func (l Logger) enable(loglevel LogLevel) bool {
 	return l.level <= loglevel
 }
 
+func (l Logger) log(level LogLevel, msg string) {
+	now := time.Now()
+	funcName, fileName, LineNo := getInfo(3)
+	fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05 "), getLogName(level), fileName, funcName, LineNo, msg)
+}
+
 func (l Logger) Debug(msg string) {
 	if l.enable(DEBUG) {
-		now := time.Now()
-		fmt.Printf("[%s] [DEBUG] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(DEBUG, msg)
 	}
 }
 func (l Logger) Info(msg string) {
 	if l.enable(INFO) {
-		now := time.Now()
-		fmt.Printf("[%s] [INFO] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(INFO, msg)
 	}
 }
 func (l Logger) TRACE(msg string) {
 	if l.enable(TRACE) {
-		now := time.Now()
-		fmt.Printf("[%s] [TRACE] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(TRACE, msg)
 	}
 }
 func (l Logger) Warning(msg string) {
 	if l.enable(WARNING) {
-		now := time.Now()
-		fmt.Printf("[%s] [WARNING] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(WARNING, msg)
 	}
 }
 func (l Logger) Error(msg string) {
 	if l.enable(ERROR) {
-		now := time.Now()
-		fmt.Printf("[%s] [ERROR] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(ERROR, msg)
 	}
 }
 func (l Logger) Fatal(msg string) {
 	if l.enable(FATAL) {
-		now := time.Now()
-		fmt.Printf("[%s] [FATAL] %s\n", now.Format("2006-01-02 15:04:05 "), msg)
+		l.log(FATAL, msg)
 	}
+}
+
+func getInfo(n int) (funcName, fileName string, line int) {
+	pc, file, line, ok := runtime.Caller(n)
+	if !ok {
+		fmt.Printf("runtime .Caller() failed\n")
+		return
+	}
+	funcName = strings.Split(runtime.FuncForPC(pc).Name(), ".")[1]
+	fileName = path.Base(file)
+	return
 }

@@ -1,10 +1,32 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"path"
+	"runtime"
+	"time"
+)
 
 func main() {
+	f()
+}
+
+func f1() {
+	pc, file, line, ok := runtime.Caller(0)
+	if !ok {
+		fmt.Printf("runtime.Caller() failed\n")
+		return
+	}
+	funcName := runtime.FuncForPC(pc).Name()
+	fmt.Println(funcName)
+	fmt.Println(file)
+	fmt.Println(path.Base(file))
+	fmt.Println(line)
+}
+
+func f() {
 	for {
-		logger := Logger{UNKNOWN}
+		logger := Logger{INFO}
 		Logger.Debug(logger, "这是一条Debug日志")
 		Logger.TRACE(logger, "这是一条Trace日志")
 		Logger.Info(logger, "这是一条Info日志")
