@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/mylogger"
 	"path"
 	"runtime"
 	"time"
@@ -25,14 +26,15 @@ func f1() {
 }
 
 func f() {
+	fileLogger := mylogger.NewFileLogger("info", "./", "log", 50)
+	defer fileLogger.Close()
 	for {
-		logger := Logger{UNKNOWN}
-		Logger.Debug(logger, "这是一条Debug日志")
-		Logger.TRACE(logger, "这是一条Trace日志")
-		Logger.Info(logger, "这是一条Info日志")
-		Logger.Warning(logger, "这是一条Warning日志")
-		Logger.Error(logger, "这是一条Error日志")
-		Logger.Fatal(logger, "这是一条Fatal日志")
+		fileLogger.Debug("这是一条Debug日志")
+		fileLogger.TRACE("这是一条Trace日志")
+		fileLogger.Info("这是一条Info日志")
+		fileLogger.Warning("这是一条Warning日志")
+		fileLogger.Error("这是一条Error日志")
+		fileLogger.Fatal("这是一条Fatal日志")
 		time.Sleep(time.Second)
 	}
 }

@@ -1,6 +1,8 @@
 package test
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //关于append删除切片中的某个元素
 func main() {
