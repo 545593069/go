@@ -1,4 +1,4 @@
-package test
+package main
 
 // Go语言中函数的return不是原子操作，在底层是分为两步来执行
 //第一步:返回值赋值
